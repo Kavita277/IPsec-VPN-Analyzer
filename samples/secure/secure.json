@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "session": {
+    "session_id": "vpn_secure_001"
+  },
+  "protocol": {
+    "ike_version": "IKEv2"
+  },
+  "negotiation": {
+    "status": "successful",
+    "offered_proposals": [
+      {
+        "encryption": "AES-256-CBC",
+        "integrity": "HMAC-SHA2-256",
+        "dh_group": "MODP-2048"
+      }
+    ],
+    "negotiated_proposal": {
+      "encryption": "AES-256-CBC",
+      "integrity": "HMAC-SHA2-256",
+      "dh_group": "MODP-2048"
+    }
+  },
+  "security_parameters": {
+    "encryption": "AES-256-CBC",
+    "integrity": "HMAC-SHA2-256",
+    "dh_group": "MODP-2048"
+  },
+  "security_associations": [],
+  "evidence": [
+    {
+      "packet": 42,
+      "field": "ikev2.proposal.encryption",
+      "value": "AES-256-CBC",
+      "session_id": "vpn_secure_001"
+    }
+  ],
+  "metadata": {
+    "source": "mock",
+    "capture_file": null
+  }
+}

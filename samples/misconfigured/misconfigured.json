@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "session": {
+    "session_id": "vpn_misconfigured_001"
+  },
+  "protocol": {
+    "ike_version": "IKEv2"
+  },
+  "negotiation": {
+    "status": "failed",
+    "offered_proposals": [],
+    "negotiated_proposal": null
+  },
+  "security_parameters": {
+    "encryption": null,
+    "integrity": null,
+    "dh_group": null
+  },
+  "security_associations": [],
+  "evidence": [],
+  "metadata": {
+    "source": "mock",
+    "capture_file": null
+  }
+}
