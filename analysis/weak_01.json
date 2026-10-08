@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "session": {
-    "session_id": "vpn_b1c2d3e4f5a60718"
+    "session_id": "vpn_c0a15c9a873db101"
   },
   "protocol": {
     "ike_version": "IKEv2"
@@ -28,14 +28,24 @@
   },
   "security_associations": [
     {
-      "initiator_spi": "b1:c2:d3:e4:f5:a6:07:18",
+      "initiator_spi": "c0:a1:5c:9a:87:3d:b1:01",
       "responder_spi": null,
       "packet": 1
     },
     {
-      "initiator_spi": "b1:c2:d3:e4:f5:a6:07:18",
-      "responder_spi": "98:76:54:32:10:fe:dc:ba",
+      "initiator_spi": "c0:a1:5c:9a:87:3d:b1:01",
+      "responder_spi": "20:10:6c:94:69:fa:ef:2e",
       "packet": 2
+    },
+    {
+      "initiator_spi": "c0:a1:5c:9a:87:3d:b1:01",
+      "responder_spi": "20:10:6c:94:69:fa:ef:2e",
+      "packet": 3
+    },
+    {
+      "initiator_spi": "c0:a1:5c:9a:87:3d:b1:01",
+      "responder_spi": "20:10:6c:94:69:fa:ef:2e",
+      "packet": 4
     }
   ],
   "evidence": [
@@ -43,67 +53,91 @@
       "packet": 1,
       "field": "isakmp.version",
       "value": "IKEv2",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 1,
       "field": "isakmp.ispi",
-      "value": "b1:c2:d3:e4:f5:a6:07:18",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "value": "c0:a1:5c:9a:87:3d:b1:01",
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 1,
       "field": "isakmp.tf.id.encr",
       "value": "AES-128-CBC",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 1,
       "field": "isakmp.tf.id.integ",
       "value": "HMAC-SHA1",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 1,
       "field": "isakmp.tf.id.dh",
       "value": "MODP-1024",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 2,
       "field": "isakmp.ispi",
-      "value": "b1:c2:d3:e4:f5:a6:07:18",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "value": "c0:a1:5c:9a:87:3d:b1:01",
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 2,
       "field": "isakmp.rspi",
-      "value": "98:76:54:32:10:fe:dc:ba",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "value": "20:10:6c:94:69:fa:ef:2e",
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 2,
       "field": "isakmp.tf.id.encr",
       "value": "AES-128-CBC",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 2,
       "field": "isakmp.tf.id.integ",
       "value": "HMAC-SHA1",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 2,
       "field": "isakmp.tf.id.dh",
       "value": "MODP-1024",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "session_id": "vpn_c0a15c9a873db101"
     },
     {
       "packet": 2,
       "field": "isakmp.negotiation.status",
       "value": "successful",
-      "session_id": "vpn_b1c2d3e4f5a60718"
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 3,
+      "field": "isakmp.ispi",
+      "value": "c0:a1:5c:9a:87:3d:b1:01",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 3,
+      "field": "isakmp.rspi",
+      "value": "20:10:6c:94:69:fa:ef:2e",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 4,
+      "field": "isakmp.ispi",
+      "value": "c0:a1:5c:9a:87:3d:b1:01",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 4,
+      "field": "isakmp.rspi",
+      "value": "20:10:6c:94:69:fa:ef:2e",
+      "session_id": "vpn_c0a15c9a873db101"
     }
   ],
   "metadata": {

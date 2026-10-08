@@ -330,9 +330,9 @@ class IKEv2Parser:
         """Detect notify payload error messages (e.g. NO_PROPOSAL_CHOSEN)."""
         # Look for notify message types in layer
         for k, v in self._flatten_dict(layer).items():
-            if "notify.message_type" in k or "notify.type" in k or "notify_msg_type" in k:
+            if "notify.message_type" in k or "notify.type" in k or "notify_msg_type" in k or "notify.msgtype" in k or "msgtype" in k:
                 s_val = str(v)
-                if "14" in s_val or "NO_PROPOSAL_CHOSEN" in s_val.upper():
+                if s_val == "14" or "NO_PROPOSAL_CHOSEN" in s_val.upper():
                     return "NO_PROPOSAL_CHOSEN", k
                 try:
                     code = int(s_val, 0)

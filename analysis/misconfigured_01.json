@@ -1,18 +1,18 @@
 {
   "schema_version": "1.0",
   "session": {
-    "session_id": "vpn_c1d2e3f4a5b60718"
+    "session_id": "vpn_9a04b63890144d99"
   },
   "protocol": {
     "ike_version": "IKEv2"
   },
   "negotiation": {
-    "status": null,
+    "status": "failed",
     "offered_proposals": [
       {
-        "encryption": "3DES-CBC",
-        "integrity": "HMAC-MD5",
-        "dh_group": "MODP-768"
+        "encryption": "AES-128-CBC",
+        "integrity": "HMAC-SHA1",
+        "dh_group": "MODP-1024"
       }
     ],
     "negotiated_proposal": null
@@ -24,13 +24,13 @@
   },
   "security_associations": [
     {
-      "initiator_spi": "c1:d2:e3:f4:a5:b6:07:18",
+      "initiator_spi": "9a:04:b6:38:90:14:4d:99",
       "responder_spi": null,
       "packet": 1
     },
     {
-      "initiator_spi": "c1:d2:e3:f4:a5:b6:07:18",
-      "responder_spi": "77:66:55:44:33:22:11:00",
+      "initiator_spi": "9a:04:b6:38:90:14:4d:99",
+      "responder_spi": null,
       "packet": 2
     }
   ],
@@ -39,43 +39,43 @@
       "packet": 1,
       "field": "isakmp.version",
       "value": "IKEv2",
-      "session_id": "vpn_c1d2e3f4a5b60718"
+      "session_id": "vpn_9a04b63890144d99"
     },
     {
       "packet": 1,
       "field": "isakmp.ispi",
-      "value": "c1:d2:e3:f4:a5:b6:07:18",
-      "session_id": "vpn_c1d2e3f4a5b60718"
+      "value": "9a:04:b6:38:90:14:4d:99",
+      "session_id": "vpn_9a04b63890144d99"
     },
     {
       "packet": 1,
       "field": "isakmp.tf.id.encr",
-      "value": "3DES-CBC",
-      "session_id": "vpn_c1d2e3f4a5b60718"
+      "value": "AES-128-CBC",
+      "session_id": "vpn_9a04b63890144d99"
     },
     {
       "packet": 1,
       "field": "isakmp.tf.id.integ",
-      "value": "HMAC-MD5",
-      "session_id": "vpn_c1d2e3f4a5b60718"
+      "value": "HMAC-SHA1",
+      "session_id": "vpn_9a04b63890144d99"
     },
     {
       "packet": 1,
       "field": "isakmp.tf.id.dh",
-      "value": "MODP-768",
-      "session_id": "vpn_c1d2e3f4a5b60718"
+      "value": "MODP-1024",
+      "session_id": "vpn_9a04b63890144d99"
     },
     {
       "packet": 2,
       "field": "isakmp.ispi",
-      "value": "c1:d2:e3:f4:a5:b6:07:18",
-      "session_id": "vpn_c1d2e3f4a5b60718"
+      "value": "9a:04:b6:38:90:14:4d:99",
+      "session_id": "vpn_9a04b63890144d99"
     },
     {
       "packet": 2,
-      "field": "isakmp.rspi",
-      "value": "77:66:55:44:33:22:11:00",
-      "session_id": "vpn_c1d2e3f4a5b60718"
+      "field": "isakmp.typepayload_tree.isakmp.notify.msgtype",
+      "value": "NO_PROPOSAL_CHOSEN",
+      "session_id": "vpn_9a04b63890144d99"
     }
   ],
   "metadata": {
