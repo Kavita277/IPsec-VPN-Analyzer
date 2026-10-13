@@ -1,0 +1,43 @@
+{
+  "policy_id": "nist-baseline",
+  "name": "NIST-aligned enterprise baseline",
+  "version": "1.0",
+  "description": "General-purpose baseline for IKEv2/IPsec. Rejects broken or obsolete algorithms and groups, flags SHA-1 and 3DES as deprecated, and accepts AES-128 and above with SHA-2 integrity and 2048-bit or larger DH.",
+  "references": [
+    "NIST SP 800-77 Rev.1",
+    "NIST SP 800-131A Rev.2",
+    "RFC 8247",
+    "RFC 8221"
+  ],
+  "ike_versions": ["IKEv2"],
+  "encryption": {
+    "forbidden": ["NULL", "DES", "DES-IV64", "DES-IV32", "RC5", "IDEA", "3IDEA", "CAST", "Blowfish"],
+    "deprecated": ["3DES-CBC"],
+    "approved": [
+      "AES-128-CBC", "AES-192-CBC", "AES-256-CBC",
+      "AES-128-CTR", "AES-192-CTR", "AES-256-CTR",
+      "AES-128-GCM", "AES-192-GCM", "AES-256-GCM",
+      "CHACHA20-POLY1305"
+    ]
+  },
+  "integrity": {
+    "forbidden": ["HMAC-MD5", "HMAC-MD5-128", "KPDK-MD5", "DES-MAC"],
+    "deprecated": ["HMAC-SHA1", "HMAC-SHA1-160"],
+    "approved": ["HMAC-SHA2-256", "HMAC-SHA2-384", "HMAC-SHA2-512"]
+  },
+  "dh_group": {
+    "forbidden": ["MODP-768", "MODP-1024", "MODP-1536"],
+    "deprecated": [],
+    "approved": [
+      "MODP-2048", "MODP-3072", "MODP-4096", "MODP-6144", "MODP-8192",
+      "ECP-256", "ECP-384", "ECP-521", "Curve25519", "Curve448"
+    ]
+  },
+  "recommended": {
+    "encryption": "AES-256-CBC",
+    "integrity": "HMAC-SHA2-256",
+    "dh_group": "MODP-3072",
+    "strongswan": "aes256-sha256-modp3072"
+  },
+  "severities": {}
+}

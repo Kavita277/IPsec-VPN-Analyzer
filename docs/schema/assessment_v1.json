@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "assessment_v1.json",
+  "title": "Assessed IPsec session (analysis v1.0 plus findings, posture, assessment)",
+  "description": "Output of assess.py. Every field of the Person 1 analysis document (docs/schema/v1.json) is preserved unchanged; the three blocks below are added by the assessment engine.",
+  "type": "object",
+  "required": ["schema_version", "session", "protocol", "negotiation", "security_parameters", "evidence", "metadata", "findings", "posture", "assessment"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "session": {"type": "object"},
+    "protocol": {"type": "object"},
+    "negotiation": {"type": "object"},
+    "security_parameters": {"type": "object"},
+    "security_associations": {"type": "array"},
+    "evidence": {"type": "array"},
+    "metadata": {"type": "object"},
+    "findings": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/finding"}
+    },
+    "posture": {
+      "type": "object",
+      "required": ["score", "rating", "highest_severity", "counts", "basis", "basis_note"],
+      "properties": {
+        "score": {"type": ["integer", "null"], "minimum": 0, "maximum": 100},
+        "rating": {"enum": ["Compliant", "Low risk", "Moderate risk", "High risk", "Critical", "Not assessable"]},
+        "highest_severity": {"enum": ["Informational", "Low", "Medium", "High", "Critical", null]},
+        "counts": {
+          "type": "object",
+          "required": ["Critical", "High", "Medium", "Low", "Informational"],
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "basis": {"enum": ["negotiated", "offered", "none"]},
+        "basis_note": {"type": "string"}
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "required": ["assessment_schema", "ruleset_version", "policy", "rules_evaluated"],
+      "properties": {
+        "assessment_schema": {"const": "assessment-1.0"},
+        "ruleset_version": {"type": "string"},
+        "policy": {
+          "type": "object",
+          "required": ["id", "name", "version"],
+          "properties": {"id": {"type": "string"}, "name": {"type": "string"}, "version": {"type": "string"}}
+        },
+        "rules_evaluated": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "definitions": {
+    "finding": {
+      "type": "object",
+      "required": ["finding_id", "key", "title", "severity", "category", "scope", "session_id", "rule_version", "policy_id", "evidence", "why_it_matters", "remediation", "standards"],
+      "properties": {
+        "finding_id": {"type": "string", "pattern": "^IPSEC-[A-Z]+-[0-9]{3}$"},
+        "key": {"type": "string", "description": "Stable identity used to match findings across two assessments."},
+        "title": {"type": "string"},
+        "severity": {"enum": ["Informational", "Low", "Medium", "High", "Critical"]},
+        "category": {"enum": ["algorithm", "protocol", "negotiation", "observability"]},
+        "scope": {"enum": ["negotiated", "offered", "session"]},
+        "session_id": {"type": ["string", "null"]},
+        "rule_version": {"type": "string"},
+        "policy_id": {"type": "string"},
+        "evidence": {
+          "type": "object",
+          "required": ["parameter", "observed", "expected", "items"],
+          "properties": {
+            "parameter": {"type": "string"},
+            "observed": {},
+            "expected": {"type": "string"},
+            "items": {
+              "type": "array",
+              "description": "Entries copied unchanged from the analyzer's evidence[] list.",
+              "items": {
+                "type": "object",
+                "required": ["packet", "field", "value", "session_id"],
+                "properties": {
+                  "packet": {"type": "integer"},
+                  "field": {"type": "string"},
+                  "value": {},
+                  "session_id": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "why_it_matters": {"type": "string"},
+        "remediation": {"type": "string"},
+        "standards": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

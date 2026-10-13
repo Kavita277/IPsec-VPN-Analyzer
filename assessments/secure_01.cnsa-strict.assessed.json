@@ -1,0 +1,253 @@
+{
+  "schema_version": "1.0",
+  "session": {
+    "session_id": "vpn_6555f95dd8e7ea73"
+  },
+  "protocol": {
+    "ike_version": "IKEv2"
+  },
+  "negotiation": {
+    "status": "successful",
+    "offered_proposals": [
+      {
+        "encryption": "AES-256-CBC",
+        "integrity": "HMAC-SHA2-256",
+        "dh_group": "MODP-2048"
+      }
+    ],
+    "negotiated_proposal": {
+      "encryption": "AES-256-CBC",
+      "integrity": "HMAC-SHA2-256",
+      "dh_group": "MODP-2048"
+    }
+  },
+  "security_parameters": {
+    "encryption": "AES-256-CBC",
+    "integrity": "HMAC-SHA2-256",
+    "dh_group": "MODP-2048"
+  },
+  "security_associations": [
+    {
+      "initiator_spi": "65:55:f9:5d:d8:e7:ea:73",
+      "responder_spi": null,
+      "packet": 1
+    },
+    {
+      "initiator_spi": "65:55:f9:5d:d8:e7:ea:73",
+      "responder_spi": "86:2e:0e:28:f1:cb:49:08",
+      "packet": 2
+    },
+    {
+      "initiator_spi": "65:55:f9:5d:d8:e7:ea:73",
+      "responder_spi": "86:2e:0e:28:f1:cb:49:08",
+      "packet": 3
+    },
+    {
+      "initiator_spi": "65:55:f9:5d:d8:e7:ea:73",
+      "responder_spi": "86:2e:0e:28:f1:cb:49:08",
+      "packet": 4
+    }
+  ],
+  "evidence": [
+    {
+      "packet": 1,
+      "field": "isakmp.version",
+      "value": "IKEv2",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.ispi",
+      "value": "65:55:f9:5d:d8:e7:ea:73",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.encr",
+      "value": "AES-256-CBC",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.integ",
+      "value": "HMAC-SHA2-256",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.dh",
+      "value": "MODP-2048",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.ispi",
+      "value": "65:55:f9:5d:d8:e7:ea:73",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.rspi",
+      "value": "86:2e:0e:28:f1:cb:49:08",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.tf.id.encr",
+      "value": "AES-256-CBC",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.tf.id.integ",
+      "value": "HMAC-SHA2-256",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.tf.id.dh",
+      "value": "MODP-2048",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.negotiation.status",
+      "value": "successful",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 3,
+      "field": "isakmp.ispi",
+      "value": "65:55:f9:5d:d8:e7:ea:73",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 3,
+      "field": "isakmp.rspi",
+      "value": "86:2e:0e:28:f1:cb:49:08",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 4,
+      "field": "isakmp.ispi",
+      "value": "65:55:f9:5d:d8:e7:ea:73",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    },
+    {
+      "packet": 4,
+      "field": "isakmp.rspi",
+      "value": "86:2e:0e:28:f1:cb:49:08",
+      "session_id": "vpn_6555f95dd8e7ea73"
+    }
+  ],
+  "metadata": {
+    "source": "tshark",
+    "capture_file": "secure_01.pcap"
+  },
+  "findings": [
+    {
+      "finding_id": "IPSEC-DH-002",
+      "key": "IPSEC-DH-002|negotiated|dh_group|MODP-2048",
+      "title": "Diffie-Hellman group not approved by policy",
+      "severity": "Medium",
+      "category": "algorithm",
+      "scope": "negotiated",
+      "session_id": "vpn_6555f95dd8e7ea73",
+      "rule_version": "1.0",
+      "policy_id": "cnsa-strict",
+      "evidence": {
+        "parameter": "dh_group",
+        "observed": "MODP-2048",
+        "expected": "One of: MODP-3072, MODP-4096, MODP-6144, MODP-8192, ECP-384, ECP-521",
+        "items": [
+          {
+            "packet": 2,
+            "field": "isakmp.tf.id.dh",
+            "value": "MODP-2048",
+            "session_id": "vpn_6555f95dd8e7ea73"
+          }
+        ]
+      },
+      "why_it_matters": "This group is not on the policy's approved list. It is not necessarily weak in general, but the selected policy requires a larger or different group.",
+      "remediation": "Configure an approved Diffie-Hellman group in the IKE proposal on both peers. A proposal that satisfies policy 'cnsa-strict': AES-256-CBC / HMAC-SHA2-384 / ECP-384 (strongSwan swanctl.conf: proposals = aes256-sha384-ecp384).",
+      "standards": [
+        "NIST SP 800-57 Part 1 Rev.5",
+        "RFC 8247"
+      ]
+    },
+    {
+      "finding_id": "IPSEC-INT-003",
+      "key": "IPSEC-INT-003|negotiated|integrity|HMAC-SHA2-256",
+      "title": "Integrity algorithm not approved by policy",
+      "severity": "Medium",
+      "category": "algorithm",
+      "scope": "negotiated",
+      "session_id": "vpn_6555f95dd8e7ea73",
+      "rule_version": "1.0",
+      "policy_id": "cnsa-strict",
+      "evidence": {
+        "parameter": "integrity",
+        "observed": "HMAC-SHA2-256",
+        "expected": "One of: HMAC-SHA2-384, HMAC-SHA2-512",
+        "items": [
+          {
+            "packet": 2,
+            "field": "isakmp.tf.id.integ",
+            "value": "HMAC-SHA2-256",
+            "session_id": "vpn_6555f95dd8e7ea73"
+          }
+        ]
+      },
+      "why_it_matters": "This integrity algorithm is not on the policy's approved list. The selected policy only allows the listed algorithms.",
+      "remediation": "Configure an approved integrity algorithm in the IKE and ESP proposals. A proposal that satisfies policy 'cnsa-strict': AES-256-CBC / HMAC-SHA2-384 / ECP-384 (strongSwan swanctl.conf: proposals = aes256-sha384-ecp384).",
+      "standards": [
+        "NIST SP 800-77 Rev.1",
+        "RFC 8221"
+      ]
+    }
+  ],
+  "posture": {
+    "score": 80,
+    "rating": "Moderate risk",
+    "highest_severity": "Medium",
+    "counts": {
+      "Critical": 0,
+      "High": 0,
+      "Medium": 2,
+      "Low": 0,
+      "Informational": 0
+    },
+    "basis": "negotiated",
+    "basis_note": "Judged on the parameters the peers actually negotiated."
+  },
+  "assessment": {
+    "assessment_schema": "assessment-1.0",
+    "ruleset_version": "1.0.0",
+    "policy": {
+      "id": "cnsa-strict",
+      "name": "Strict high-assurance profile (CNSA 1.0 style)",
+      "version": "1.0"
+    },
+    "rules_evaluated": [
+      "IPSEC-PROTO-001",
+      "IPSEC-NEG-001",
+      "IPSEC-NEG-002",
+      "IPSEC-NEG-003",
+      "IPSEC-NEG-004",
+      "IPSEC-OBS-001",
+      "IPSEC-OBS-002",
+      "IPSEC-ALG-001",
+      "IPSEC-ALG-002",
+      "IPSEC-ALG-003",
+      "IPSEC-ALG-004",
+      "IPSEC-ALG-005",
+      "IPSEC-INT-001",
+      "IPSEC-INT-002",
+      "IPSEC-INT-003",
+      "IPSEC-INT-004",
+      "IPSEC-DH-001",
+      "IPSEC-DH-002",
+      "IPSEC-DH-003"
+    ]
+  }
+}

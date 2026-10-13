@@ -1,0 +1,34 @@
+{
+  "policy_id": "cnsa-strict",
+  "name": "Strict high-assurance profile (CNSA 1.0 style)",
+  "version": "1.0",
+  "description": "Strict profile modelled on the NSA CNSA Suite 1.0 selections for IPsec: AES-256 only, SHA-384 or stronger integrity, and 3072-bit MODP or P-384 and above for key exchange. Anything outside that set is reported, including settings the baseline policy accepts.",
+  "references": [
+    "NSA CNSA Suite 1.0 (CNSSP 15)",
+    "NIST SP 800-57 Part 1 Rev.5",
+    "RFC 8247"
+  ],
+  "ike_versions": ["IKEv2"],
+  "encryption": {
+    "forbidden": ["NULL", "DES", "DES-IV64", "DES-IV32", "RC5", "IDEA", "3IDEA", "CAST", "Blowfish", "3DES-CBC"],
+    "deprecated": [],
+    "approved": ["AES-256-CBC", "AES-256-GCM"]
+  },
+  "integrity": {
+    "forbidden": ["HMAC-MD5", "HMAC-MD5-128", "KPDK-MD5", "DES-MAC"],
+    "deprecated": [],
+    "approved": ["HMAC-SHA2-384", "HMAC-SHA2-512"]
+  },
+  "dh_group": {
+    "forbidden": ["MODP-768", "MODP-1024", "MODP-1536"],
+    "deprecated": [],
+    "approved": ["MODP-3072", "MODP-4096", "MODP-6144", "MODP-8192", "ECP-384", "ECP-521"]
+  },
+  "recommended": {
+    "encryption": "AES-256-CBC",
+    "integrity": "HMAC-SHA2-384",
+    "dh_group": "ECP-384",
+    "strongswan": "aes256-sha384-ecp384"
+  },
+  "severities": {}
+}

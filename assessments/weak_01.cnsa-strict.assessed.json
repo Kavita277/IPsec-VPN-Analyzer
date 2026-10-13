@@ -1,0 +1,284 @@
+{
+  "schema_version": "1.0",
+  "session": {
+    "session_id": "vpn_c0a15c9a873db101"
+  },
+  "protocol": {
+    "ike_version": "IKEv2"
+  },
+  "negotiation": {
+    "status": "successful",
+    "offered_proposals": [
+      {
+        "encryption": "AES-128-CBC",
+        "integrity": "HMAC-SHA1",
+        "dh_group": "MODP-1024"
+      }
+    ],
+    "negotiated_proposal": {
+      "encryption": "AES-128-CBC",
+      "integrity": "HMAC-SHA1",
+      "dh_group": "MODP-1024"
+    }
+  },
+  "security_parameters": {
+    "encryption": "AES-128-CBC",
+    "integrity": "HMAC-SHA1",
+    "dh_group": "MODP-1024"
+  },
+  "security_associations": [
+    {
+      "initiator_spi": "c0:a1:5c:9a:87:3d:b1:01",
+      "responder_spi": null,
+      "packet": 1
+    },
+    {
+      "initiator_spi": "c0:a1:5c:9a:87:3d:b1:01",
+      "responder_spi": "20:10:6c:94:69:fa:ef:2e",
+      "packet": 2
+    },
+    {
+      "initiator_spi": "c0:a1:5c:9a:87:3d:b1:01",
+      "responder_spi": "20:10:6c:94:69:fa:ef:2e",
+      "packet": 3
+    },
+    {
+      "initiator_spi": "c0:a1:5c:9a:87:3d:b1:01",
+      "responder_spi": "20:10:6c:94:69:fa:ef:2e",
+      "packet": 4
+    }
+  ],
+  "evidence": [
+    {
+      "packet": 1,
+      "field": "isakmp.version",
+      "value": "IKEv2",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.ispi",
+      "value": "c0:a1:5c:9a:87:3d:b1:01",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.encr",
+      "value": "AES-128-CBC",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.integ",
+      "value": "HMAC-SHA1",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.dh",
+      "value": "MODP-1024",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.ispi",
+      "value": "c0:a1:5c:9a:87:3d:b1:01",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.rspi",
+      "value": "20:10:6c:94:69:fa:ef:2e",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.tf.id.encr",
+      "value": "AES-128-CBC",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.tf.id.integ",
+      "value": "HMAC-SHA1",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.tf.id.dh",
+      "value": "MODP-1024",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.negotiation.status",
+      "value": "successful",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 3,
+      "field": "isakmp.ispi",
+      "value": "c0:a1:5c:9a:87:3d:b1:01",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 3,
+      "field": "isakmp.rspi",
+      "value": "20:10:6c:94:69:fa:ef:2e",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 4,
+      "field": "isakmp.ispi",
+      "value": "c0:a1:5c:9a:87:3d:b1:01",
+      "session_id": "vpn_c0a15c9a873db101"
+    },
+    {
+      "packet": 4,
+      "field": "isakmp.rspi",
+      "value": "20:10:6c:94:69:fa:ef:2e",
+      "session_id": "vpn_c0a15c9a873db101"
+    }
+  ],
+  "metadata": {
+    "source": "tshark",
+    "capture_file": "weak_01.pcap"
+  },
+  "findings": [
+    {
+      "finding_id": "IPSEC-DH-001",
+      "key": "IPSEC-DH-001|negotiated|dh_group|MODP-1024",
+      "title": "Forbidden Diffie-Hellman group",
+      "severity": "High",
+      "category": "algorithm",
+      "scope": "negotiated",
+      "session_id": "vpn_c0a15c9a873db101",
+      "rule_version": "1.0",
+      "policy_id": "cnsa-strict",
+      "evidence": {
+        "parameter": "dh_group",
+        "observed": "MODP-1024",
+        "expected": "One of: MODP-3072, MODP-4096, MODP-6144, MODP-8192, ECP-384, ECP-521",
+        "items": [
+          {
+            "packet": 2,
+            "field": "isakmp.tf.id.dh",
+            "value": "MODP-1024",
+            "session_id": "vpn_c0a15c9a873db101"
+          }
+        ]
+      },
+      "why_it_matters": "MODP groups of 1536 bits or fewer give well under 112 bits of security. 1024-bit groups are within reach of well-resourced attackers through precomputation against common primes (the Logjam attack), which can expose the session keys, and RFC 8247 advises against them.",
+      "remediation": "Use a 2048-bit or larger MODP group, or an elliptic-curve group, in the IKE proposal on both peers. A proposal that satisfies policy 'cnsa-strict': AES-256-CBC / HMAC-SHA2-384 / ECP-384 (strongSwan swanctl.conf: proposals = aes256-sha384-ecp384).",
+      "standards": [
+        "RFC 8247",
+        "NIST SP 800-57 Part 1 Rev.5",
+        "NIST SP 800-131A Rev.2"
+      ]
+    },
+    {
+      "finding_id": "IPSEC-ALG-003",
+      "key": "IPSEC-ALG-003|negotiated|encryption|AES-128-CBC",
+      "title": "Encryption algorithm not approved by policy",
+      "severity": "Medium",
+      "category": "algorithm",
+      "scope": "negotiated",
+      "session_id": "vpn_c0a15c9a873db101",
+      "rule_version": "1.0",
+      "policy_id": "cnsa-strict",
+      "evidence": {
+        "parameter": "encryption",
+        "observed": "AES-128-CBC",
+        "expected": "One of: AES-256-CBC, AES-256-GCM",
+        "items": [
+          {
+            "packet": 2,
+            "field": "isakmp.tf.id.encr",
+            "value": "AES-128-CBC",
+            "session_id": "vpn_c0a15c9a873db101"
+          }
+        ]
+      },
+      "why_it_matters": "This cipher is not on the policy's approved list. It is not necessarily broken, but the selected policy only allows the listed algorithms and key lengths.",
+      "remediation": "Configure an approved cipher and key length in the IKE and ESP proposals. A proposal that satisfies policy 'cnsa-strict': AES-256-CBC / HMAC-SHA2-384 / ECP-384 (strongSwan swanctl.conf: proposals = aes256-sha384-ecp384).",
+      "standards": [
+        "NIST SP 800-77 Rev.1",
+        "RFC 8221"
+      ]
+    },
+    {
+      "finding_id": "IPSEC-INT-003",
+      "key": "IPSEC-INT-003|negotiated|integrity|HMAC-SHA1",
+      "title": "Integrity algorithm not approved by policy",
+      "severity": "Medium",
+      "category": "algorithm",
+      "scope": "negotiated",
+      "session_id": "vpn_c0a15c9a873db101",
+      "rule_version": "1.0",
+      "policy_id": "cnsa-strict",
+      "evidence": {
+        "parameter": "integrity",
+        "observed": "HMAC-SHA1",
+        "expected": "One of: HMAC-SHA2-384, HMAC-SHA2-512",
+        "items": [
+          {
+            "packet": 2,
+            "field": "isakmp.tf.id.integ",
+            "value": "HMAC-SHA1",
+            "session_id": "vpn_c0a15c9a873db101"
+          }
+        ]
+      },
+      "why_it_matters": "This integrity algorithm is not on the policy's approved list. The selected policy only allows the listed algorithms.",
+      "remediation": "Configure an approved integrity algorithm in the IKE and ESP proposals. A proposal that satisfies policy 'cnsa-strict': AES-256-CBC / HMAC-SHA2-384 / ECP-384 (strongSwan swanctl.conf: proposals = aes256-sha384-ecp384).",
+      "standards": [
+        "NIST SP 800-77 Rev.1",
+        "RFC 8221"
+      ]
+    }
+  ],
+  "posture": {
+    "score": 55,
+    "rating": "High risk",
+    "highest_severity": "High",
+    "counts": {
+      "Critical": 0,
+      "High": 1,
+      "Medium": 2,
+      "Low": 0,
+      "Informational": 0
+    },
+    "basis": "negotiated",
+    "basis_note": "Judged on the parameters the peers actually negotiated."
+  },
+  "assessment": {
+    "assessment_schema": "assessment-1.0",
+    "ruleset_version": "1.0.0",
+    "policy": {
+      "id": "cnsa-strict",
+      "name": "Strict high-assurance profile (CNSA 1.0 style)",
+      "version": "1.0"
+    },
+    "rules_evaluated": [
+      "IPSEC-PROTO-001",
+      "IPSEC-NEG-001",
+      "IPSEC-NEG-002",
+      "IPSEC-NEG-003",
+      "IPSEC-NEG-004",
+      "IPSEC-OBS-001",
+      "IPSEC-OBS-002",
+      "IPSEC-ALG-001",
+      "IPSEC-ALG-002",
+      "IPSEC-ALG-003",
+      "IPSEC-ALG-004",
+      "IPSEC-ALG-005",
+      "IPSEC-INT-001",
+      "IPSEC-INT-002",
+      "IPSEC-INT-003",
+      "IPSEC-INT-004",
+      "IPSEC-DH-001",
+      "IPSEC-DH-002",
+      "IPSEC-DH-003"
+    ]
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "schema_version": "1.0",
+  "session": {
+    "session_id": "vpn_9a04b63890144d99"
+  },
+  "protocol": {
+    "ike_version": "IKEv2"
+  },
+  "negotiation": {
+    "status": "failed",
+    "offered_proposals": [
+      {
+        "encryption": "AES-128-CBC",
+        "integrity": "HMAC-SHA1",
+        "dh_group": "MODP-1024"
+      }
+    ],
+    "negotiated_proposal": null
+  },
+  "security_parameters": {
+    "encryption": null,
+    "integrity": null,
+    "dh_group": null
+  },
+  "security_associations": [
+    {
+      "initiator_spi": "9a:04:b6:38:90:14:4d:99",
+      "responder_spi": null,
+      "packet": 1
+    },
+    {
+      "initiator_spi": "9a:04:b6:38:90:14:4d:99",
+      "responder_spi": null,
+      "packet": 2
+    }
+  ],
+  "evidence": [
+    {
+      "packet": 1,
+      "field": "isakmp.version",
+      "value": "IKEv2",
+      "session_id": "vpn_9a04b63890144d99"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.ispi",
+      "value": "9a:04:b6:38:90:14:4d:99",
+      "session_id": "vpn_9a04b63890144d99"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.encr",
+      "value": "AES-128-CBC",
+      "session_id": "vpn_9a04b63890144d99"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.integ",
+      "value": "HMAC-SHA1",
+      "session_id": "vpn_9a04b63890144d99"
+    },
+    {
+      "packet": 1,
+      "field": "isakmp.tf.id.dh",
+      "value": "MODP-1024",
+      "session_id": "vpn_9a04b63890144d99"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.ispi",
+      "value": "9a:04:b6:38:90:14:4d:99",
+      "session_id": "vpn_9a04b63890144d99"
+    },
+    {
+      "packet": 2,
+      "field": "isakmp.typepayload_tree.isakmp.notify.msgtype",
+      "value": "NO_PROPOSAL_CHOSEN",
+      "session_id": "vpn_9a04b63890144d99"
+    }
+  ],
+  "metadata": {
+    "source": "tshark",
+    "capture_file": "misconfigured_01.pcap"
+  },
+  "findings": [
+    {
+      "finding_id": "IPSEC-DH-001",
+      "key": "IPSEC-DH-001|offered|dh_group|MODP-1024",
+      "title": "Forbidden Diffie-Hellman group",
+      "severity": "Medium",
+      "category": "algorithm",
+      "scope": "offered",
+      "session_id": "vpn_9a04b63890144d99",
+      "rule_version": "1.0",
+      "policy_id": "nist-baseline",
+      "evidence": {
+        "parameter": "dh_group",
+        "observed": "MODP-1024",
+        "expected": "One of: MODP-2048, MODP-3072, MODP-4096, MODP-6144, MODP-8192, ECP-256, ECP-384, ECP-521, Curve25519, Curve448",
+        "items": [
+          {
+            "packet": 1,
+            "field": "isakmp.tf.id.dh",
+            "value": "MODP-1024",
+            "session_id": "vpn_9a04b63890144d99"
+          }
+        ]
+      },
+      "why_it_matters": "MODP groups of 1536 bits or fewer give well under 112 bits of security. 1024-bit groups are within reach of well-resourced attackers through precomputation against common primes (the Logjam attack), which can expose the session keys, and RFC 8247 advises against them. This value was only offered, not agreed, so severity is one level lower than if it had been negotiated.",
+      "remediation": "Use a 2048-bit or larger MODP group, or an elliptic-curve group, in the IKE proposal on both peers. A proposal that satisfies policy 'nist-baseline': AES-256-CBC / HMAC-SHA2-256 / MODP-3072 (strongSwan swanctl.conf: proposals = aes256-sha256-modp3072).",
+      "standards": [
+        "RFC 8247",
+        "NIST SP 800-57 Part 1 Rev.5",
+        "NIST SP 800-131A Rev.2"
+      ]
+    },
+    {
+      "finding_id": "IPSEC-NEG-001",
+      "key": "IPSEC-NEG-001|session|negotiation.status|failed",
+      "title": "IKE negotiation failed",
+      "severity": "Medium",
+      "category": "negotiation",
+      "scope": "session",
+      "session_id": "vpn_9a04b63890144d99",
+      "rule_version": "1.0",
+      "policy_id": "nist-baseline",
+      "evidence": {
+        "parameter": "negotiation.status",
+        "observed": "failed",
+        "expected": "successful",
+        "items": [
+          {
+            "packet": 2,
+            "field": "isakmp.typepayload_tree.isakmp.notify.msgtype",
+            "value": "NO_PROPOSAL_CHOSEN",
+            "session_id": "vpn_9a04b63890144d99"
+          }
+        ]
+      },
+      "why_it_matters": "The tunnel was not established, so this session protects no traffic. A failure like NO_PROPOSAL_CHOSEN means the peers share no acceptable proposal. The risk is lost availability, and the temptation to loosen algorithms on the stricter side just to get the tunnel up. Responder error observed: NO_PROPOSAL_CHOSEN.",
+      "remediation": "Compare the IKE proposals configured on both peers and align them on a policy-approved proposal. Do not add legacy algorithms to the stricter peer to make the tunnel come up.",
+      "standards": [
+        "RFC 7296"
+      ]
+    },
+    {
+      "finding_id": "IPSEC-INT-002",
+      "key": "IPSEC-INT-002|offered|integrity|HMAC-SHA1",
+      "title": "Deprecated integrity algorithm",
+      "severity": "Informational",
+      "category": "algorithm",
+      "scope": "offered",
+      "session_id": "vpn_9a04b63890144d99",
+      "rule_version": "1.0",
+      "policy_id": "nist-baseline",
+      "evidence": {
+        "parameter": "integrity",
+        "observed": "HMAC-SHA1",
+        "expected": "One of: HMAC-SHA2-256, HMAC-SHA2-384, HMAC-SHA2-512",
+        "items": [
+          {
+            "packet": 1,
+            "field": "isakmp.tf.id.integ",
+            "value": "HMAC-SHA1",
+            "session_id": "vpn_9a04b63890144d99"
+          }
+        ]
+      },
+      "why_it_matters": "HMAC-SHA1 is still sound as a MAC, since collision attacks on SHA-1 do not apply to the HMAC construction. SHA-1 is deprecated across NIST guidance, though, and current IPsec profiles prefer the SHA-2 family. This value was only offered, not agreed, so severity is one level lower than if it had been negotiated.",
+      "remediation": "Move to HMAC-SHA2-256 or stronger on both peers. A proposal that satisfies policy 'nist-baseline': AES-256-CBC / HMAC-SHA2-256 / MODP-3072 (strongSwan swanctl.conf: proposals = aes256-sha256-modp3072).",
+      "standards": [
+        "NIST SP 800-131A Rev.2",
+        "RFC 8247"
+      ]
+    }
+  ],
+  "posture": {
+    "score": 80,
+    "rating": "Moderate risk",
+    "highest_severity": "Medium",
+    "counts": {
+      "Critical": 0,
+      "High": 0,
+      "Medium": 2,
+      "Low": 0,
+      "Informational": 1
+    },
+    "basis": "offered",
+    "basis_note": "The handshake did not complete, so this reflects the proposals that were offered, not an established tunnel."
+  },
+  "assessment": {
+    "assessment_schema": "assessment-1.0",
+    "ruleset_version": "1.0.0",
+    "policy": {
+      "id": "nist-baseline",
+      "name": "NIST-aligned enterprise baseline",
+      "version": "1.0"
+    },
+    "rules_evaluated": [
+      "IPSEC-PROTO-001",
+      "IPSEC-NEG-001",
+      "IPSEC-NEG-002",
+      "IPSEC-NEG-003",
+      "IPSEC-NEG-004",
+      "IPSEC-OBS-001",
+      "IPSEC-OBS-002",
+      "IPSEC-ALG-001",
+      "IPSEC-ALG-002",
+      "IPSEC-ALG-003",
+      "IPSEC-ALG-004",
+      "IPSEC-ALG-005",
+      "IPSEC-INT-001",
+      "IPSEC-INT-002",
+      "IPSEC-INT-003",
+      "IPSEC-INT-004",
+      "IPSEC-DH-001",
+      "IPSEC-DH-002",
+      "IPSEC-DH-003"
+    ]
+  }
+}
