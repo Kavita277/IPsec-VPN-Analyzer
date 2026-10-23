@@ -39,13 +39,15 @@ Without `tshark` the dashboard still works with the sample sessions and with ana
 ## Tests
 
 ```bash
-python -m pytest assessment ai backend     # 129 tests
+python -m pytest assessment ai backend     # 130 tests
 python -m pytest analyzer                  # Person 1's tests (need tshark and scapy)
 ```
 
 ## The dashboard
 
 - **Assessment:** rating and score, a handshake ladder, negotiated and offered parameters, and findings grouped by severity. Selecting a finding highlights the packets that are its evidence and shows the chain: observed, policy, rule, evidence, meaning, fix.
+- **How this verdict is reached** (bottom of the Assessment tab): states that the tool audits the negotiated configuration and does not detect attacks or malware, what happens to an uploaded PCAP or JSON, each parameter checked against the policy for the open session, the score arithmetic, and which of the 19 rules fired. Backed by `GET /api/methodology`.
+- **Session help:** the `?` beside the Session selector explains that a session is one IKE security association (one tunnel negotiation, named from its initiator SPI) and shows the SPIs and packets of the session that is open.
 - **Before and after:** compare two sessions under the same policy. Shows resolved, introduced and unchanged findings.
 - **Report:** HTML (prints cleanly to PDF) and Markdown, with evidence, rule versions and limits.
 
@@ -63,6 +65,7 @@ python -m pytest analyzer                  # Person 1's tests (need tshark and s
 | Endpoint | Purpose |
 | --- | --- |
 | `GET /api/health`, `/api/policies`, `/api/samples` | Status, bundled policies, sample sessions |
+| `GET /api/methodology?policy=` | Policy lists, severity weights, rating scale and rule catalogue behind the verdict |
 | `GET /api/samples/{name}?policy=` | Assess a sample |
 | `POST /api/upload?policy=` | Multipart `.pcap`, `.pcapng` or analysis `.json` (max 25 MB) |
 | `POST /api/assess?policy=` | Assess an analysis JSON body |

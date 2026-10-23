@@ -29,6 +29,7 @@ const q = (policy) => `?policy=${encodeURIComponent(policy)}`;
 export const api = {
   health: () => request("/api/health").then((r) => r.json()),
   policies: () => request("/api/policies").then((r) => r.json()),
+  methodology: (policy) => request(`/api/methodology${q(policy)}`).then((r) => r.json()),
   samples: () => request("/api/samples").then((r) => r.json()),
   sample: (name, policy) => request(`/api/samples/${encodeURIComponent(name)}${q(policy)}`).then((r) => r.json()),
   assess: (doc, policy) => request(`/api/assess${q(policy)}`, json(doc)).then((r) => r.json()),

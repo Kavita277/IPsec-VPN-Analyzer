@@ -7,6 +7,8 @@ import Findings from "./components/Findings.jsx";
 import Detail from "./components/Detail.jsx";
 import Compare from "./components/Compare.jsx";
 import Report from "./components/Report.jsx";
+import RiskBasis from "./components/RiskBasis.jsx";
+import SessionHelp from "./components/SessionHelp.jsx";
 
 const TABS = [["assessment", "Assessment"], ["compare", "Before and after"], ["report", "Report"]];
 
@@ -23,6 +25,8 @@ export default function App() {
   const [selKey, setSelKey] = useState(null);
   const [comparison, setComparison] = useState(null);
   const [tab, setTab] = useState("assessment");
+  const [methodology, setMethodology] = useState(null);
+  const [showSession, setShowSession] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const fileInput = useRef(null);
@@ -32,6 +36,12 @@ export default function App() {
       .then(([h, p, s]) => { setHealth(h); setPolicies(p); setSamples(s); })
       .catch((e) => setError(e.message));
   }, []);
+
+  useEffect(() => {
+    let live = true;
+    api.methodology(policy).then((m) => live && setMethodology(m)).catch((e) => live && setError(e.message));
+    return () => { live = false; };
+  }, [policy]);
 
   // Load or re-assess whenever the source or policy changes.
   useEffect(() => {
@@ -92,7 +102,7 @@ export default function App() {
         </div>
         <div className="controls">
           <label className="field">
-            <span>Session</span>
+            <span>Session <button type="button" className="help" aria-expanded={showSession} aria-controls="session-help" onClick={() => setShowSession((v) => !v)} title="What is a session?">?<span className="sr-only"> What is a session?</span></button></span>
             <select value={sourceValue} onChange={(e) => e.target.value.startsWith("sample:") && setSource({ type: "sample", name: e.target.value.slice(7) })}>
               {samples.map((s) => <option key={s.name} value={`sample:${s.name}`}>{s.name}{s.negotiation_status === "failed" ? " (failed handshake)" : ""}</option>)}
               {source.type === "upload" && <option value="upload">{source.label}</option>}
@@ -112,6 +122,7 @@ export default function App() {
       {health && !health.pcap_upload && (
         <p className="note">PCAP upload is off because tshark is not installed on the server. Analysis JSON files and the sample sessions still work.</p>
       )}
+      {showSession && <SessionHelp id="session-help" doc={doc} sessionCount={results.length} />}
       {error && <p className="alert" role="alert">{error} <button type="button" className="link" onClick={() => setError("")}>Dismiss</button></p>}
 
       <nav className="tabs" role="tablist" aria-label="Views">
@@ -147,6 +158,7 @@ export default function App() {
                 <Detail finding={finding} text={finding && explanation?.findings?.[finding.key]} />
               </div>
             </div>
+            <RiskBasis doc={doc} methodology={methodology} />
           </>
         ) : <p className="empty">{loading ? "Loading session…" : "Choose a sample session or upload a capture to begin."}</p>)}
 

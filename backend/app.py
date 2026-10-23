@@ -28,7 +28,7 @@ from ai import explain as ai_explain  # noqa: E402
 from ai import guard  # noqa: E402
 from ai.facts import build_facts  # noqa: E402
 from assessment import InvalidAnalysisError, PolicyError, assess, compare, list_policies, load_policy  # noqa: E402
-from assessment.rules import RULESET_VERSION  # noqa: E402
+from assessment.rules import ALL_RULES, RULESET_VERSION  # noqa: E402
 from backend.report import build_model, render_html, render_markdown  # noqa: E402
 
 SAMPLES_DIR = ROOT / "analysis"
@@ -122,6 +122,28 @@ def policies() -> List[Dict[str, Any]]:
         out.append({**pol.summary(), "description": pol.data.get("description", ""), "references": pol.references,
                     "recommended": pol.recommended})
     return out
+
+
+@app.get("/api/methodology")
+def methodology(policy: Optional[str] = None) -> Dict[str, Any]:
+    """Everything the verdict is built from, so the dashboard can show it instead of hard-coding it."""
+    from assessment.policy import PARAMETERS
+    from assessment.scoring import BASIS_NOTE, RATING_BY_HIGHEST, WEIGHTS
+
+    pol = _policy(policy)
+    severities = [s.label for s in sorted(WEIGHTS, reverse=True)]
+    return {
+        "ruleset_version": RULESET_VERSION,
+        "policy": {**pol.summary(), "ike_versions": pol.ike_versions,
+                   "parameters": {p: pol.section(p) for p in PARAMETERS}},
+        "weights": {s.label: w for s, w in WEIGHTS.items()},
+        "ratings": [{"severity": s.label, "rating": RATING_BY_HIGHEST[s]} for s in sorted(WEIGHTS, reverse=True)],
+        "severities": severities,
+        "basis": BASIS_NOTE,
+        "rules": [{"id": r.meta.finding_id, "title": r.meta.title, "category": r.meta.category,
+                   "severity": pol.severity_for(r.meta.finding_id, r.meta.default_severity).label}
+                  for r in ALL_RULES],
+    }
 
 
 @app.get("/api/samples")

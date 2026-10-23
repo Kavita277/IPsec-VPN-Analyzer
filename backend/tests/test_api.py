@@ -184,3 +184,13 @@ def test_renderers_agree_on_content():
     md, html_text = render_markdown(model), render_html(model)
     for f in assessed["findings"]:
         assert f["finding_id"] in md and f["finding_id"] in html_text
+
+
+def test_methodology_exposes_scoring_inputs():
+    m = client.get("/api/methodology", params={"policy": "cnsa-strict"}).json()
+    assert m["policy"]["id"] == "cnsa-strict" and m["policy"]["ike_versions"]
+    assert m["weights"] == {"Critical": 40, "High": 25, "Medium": 10, "Low": 3, "Informational": 0}
+    assert [r["rating"] for r in m["ratings"]][-1] == "Compliant"
+    assert len(m["rules"]) == 19 and all(r["id"].startswith("IPSEC-") for r in m["rules"])
+    assert "MODP-1024" in m["policy"]["parameters"]["dh_group"]["forbidden"]
+    assert client.get("/api/methodology", params={"policy": "bogus"}).status_code == 400
