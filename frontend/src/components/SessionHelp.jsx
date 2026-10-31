@@ -1,44 +1,86 @@
 import React from "react";
+import { XIcon, HelpCircleIcon, InfoIcon } from "./Icons.jsx";
 
-// Explains what the Session control means, using the session that is open right now.
-export default function SessionHelp({ doc, sessionCount, id }) {
+export default function SessionHelp({ doc, sessionCount, id, onClose }) {
   const sas = doc?.security_associations || [];
   const spi = sas.find((s) => s.initiator_spi)?.initiator_spi;
   const rspi = sas.find((s) => s.responder_spi)?.responder_spi;
   const packets = [...new Set(sas.map((s) => s.packet).filter((p) => p != null))];
 
   return (
-    <aside id={id} className="sessionhelp" aria-label="What a session is">
-      <h2>What is a session?</h2>
-      <p>
-        A <strong>session</strong> is one VPN tunnel being set up between two peers: a single IKE security association (SA).
-        It starts when one side sends an <code>IKE_SA_INIT</code> request and covers the handshake that follows, in which the peers
-        agree which encryption, integrity and Diffie-Hellman group to use. This tool judges that agreement.
-      </p>
-      <p>
-        Every session has an <strong>initiator SPI</strong>, an 8-byte number the first peer picks. Every packet of that tunnel carries it,
-        so the analyzer groups packets by it and names the session <code>vpn_&lt;initiator SPI&gt;</code>. One capture file can hold
-        several tunnels, and each becomes its own session with its own score.
-      </p>
-      <h3>What the controls do</h3>
-      <ul>
-        <li><strong>Session</strong> (top of the page) chooses which session you are looking at. The bundled choices are three example captures: <code>secure_01</code> (strong settings), <code>weak_01</code> (weak settings that still connect) and <code>misconfigured_01</code> (the peers never agreed). After an upload, your file appears there too.</li>
-        <li>If an upload holds more than one session, a second selector appears above the results so you can switch between them. The Policy selector re-judges the same session against a different standard.</li>
-      </ul>
-      {doc && (
-        <>
-          <h3>The session open now</h3>
-          <dl className="kv">
-            <dt>Session ID</dt><dd><code>{doc.session.session_id ?? "none found"}</code></dd>
-            <dt>Source file</dt><dd>{doc.metadata?.capture_file ? <code>{doc.metadata.capture_file}</code> : "analysis JSON (no capture)"}</dd>
-            <dt>Initiator SPI</dt><dd>{spi ? <code>{spi}</code> : "not recorded"}</dd>
-            <dt>Responder SPI</dt><dd>{rspi ? <code>{rspi}</code> : "none: the responder never answered with an SPI"}</dd>
-            <dt>Handshake packets</dt><dd>{packets.length ? packets.join(", ") : "none recorded"}</dd>
-            <dt>Outcome</dt><dd>{doc.negotiation?.status ?? "unknown"}</dd>
-            {sessionCount > 1 && <><dt>In this upload</dt><dd>{sessionCount} sessions</dd></>}
-          </dl>
-        </>
-      )}
-    </aside>
+    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="session-help-title">
+      <div className="modal-card session-help-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <div className="modal-title-wrap">
+            <div className="modal-icon-badge">
+              <HelpCircleIcon size={20} />
+            </div>
+            <div>
+              <h3 id="session-help-title" className="modal-title">What is an IPsec Session?</h3>
+              <p className="modal-subtitle">Understanding VPN tunnels, SPI identifiers, and capture grouping</p>
+            </div>
+          </div>
+          <button type="button" className="btn-icon" onClick={onClose} aria-label="Close session guide">
+            <XIcon size={18} />
+          </button>
+        </div>
+
+        <div className="modal-body">
+          <div className="session-help-prose">
+            <p>
+              A <strong>session</strong> represents one IPsec VPN tunnel being negotiated between two peers: a single <strong>IKE Security Association (SA)</strong>.
+              It begins when the initiator transmits an <code>IKE_SA_INIT</code> request and covers the cryptographic handshake that follows.
+            </p>
+            <p>
+              Every session is tagged with an <strong>initiator SPI</strong> (Security Parameter Index), a unique 8-byte hex identifier.
+              The analyzer groups all packets carrying this identifier and assigns a standardized session ID: <code>vpn_&lt;initiator SPI&gt;</code>.
+            </p>
+          </div>
+
+          <div className="session-help-controls-info">
+            <h4>Available Datasets</h4>
+            <ul className="help-bullets">
+              <li><strong>secure_01:</strong> Compliant StrongSwan tunnel with AES-256, SHA2-256, and MODP-2048.</li>
+              <li><strong>weak_01:</strong> Vulnerable tunnel connecting with broken MODP-1024 and deprecated HMAC-SHA1.</li>
+              <li><strong>misconfigured_01:</strong> Failed negotiation returning <code>NO_PROPOSAL_CHOSEN</code>.</li>
+            </ul>
+          </div>
+
+          {doc && (
+            <div className="session-active-summary">
+              <h4>Active Session Metadata</h4>
+              <dl className="help-kv-grid">
+                <dt>Session ID</dt>
+                <dd><code>{doc.session?.session_id ?? "none found"}</code></dd>
+                <dt>Source File</dt>
+                <dd>{doc.metadata?.capture_file ? <code>{doc.metadata.capture_file}</code> : "Analysis JSON"}</dd>
+                <dt>Initiator SPI</dt>
+                <dd>{spi ? <code>{spi}</code> : "Not recorded"}</dd>
+                <dt>Responder SPI</dt>
+                <dd>{rspi ? <code>{rspi}</code> : "None (Responder rejected)"}</dd>
+                <dt>Observed Packets</dt>
+                <dd>{packets.length ? packets.map((p) => `#${p}`).join(", ") : "None recorded"}</dd>
+                <dt>Negotiation Status</dt>
+                <dd className={doc.negotiation?.status === "failed" ? "text-fail" : "text-ok"}>
+                  {doc.negotiation?.status ?? "unknown"}
+                </dd>
+                {sessionCount > 1 && (
+                  <>
+                    <dt>Sessions in Upload</dt>
+                    <dd>{sessionCount} total sessions parsed</dd>
+                  </>
+                )}
+              </dl>
+            </div>
+          )}
+        </div>
+
+        <div className="modal-footer">
+          <button type="button" className="btn btn-primary" onClick={onClose}>
+            Got it
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
