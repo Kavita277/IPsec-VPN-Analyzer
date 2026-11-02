@@ -75,6 +75,8 @@ def test_upload_too_large(monkeypatch):
 def test_pcap_upload_reports_missing_tshark_clearly(monkeypatch):
     monkeypatch.setenv("PATH", "/nonexistent")
     monkeypatch.delenv("TSHARK_PATH", raising=False)
+    from analyzer.extractors.tshark_extractor import TSharkExtractor
+    monkeypatch.setattr(TSharkExtractor, "STANDARD_WINDOWS_PATHS", [])
     r = client.post("/api/upload", files={"file": ("c.pcap", b"\xd4\xc3\xb2\xa1" + b"\0" * 40)})
     assert r.status_code == 503
     assert "tshark" in r.json()["detail"].lower() and "JSON" in r.json()["detail"]
@@ -194,3 +196,11 @@ def test_methodology_exposes_scoring_inputs():
     assert len(m["rules"]) == 19 and all(r["id"].startswith("IPSEC-") for r in m["rules"])
     assert "MODP-1024" in m["policy"]["parameters"]["dh_group"]["forbidden"]
     assert client.get("/api/methodology", params={"policy": "bogus"}).status_code == 400
+
+
+def test_vercel_entrypoint():
+    from api.index import app as vercel_app
+    vercel_client = TestClient(vercel_app)
+    r = vercel_client.get("/api/health")
+    assert r.status_code == 200
+    assert r.json()["status"] == "ok"
